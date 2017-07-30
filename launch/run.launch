@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<launch>
+
+    <!-- Set value=1 to make errors print to shell console instead of Webots console -->
+    <!-- <env name="WEBOTS_STDERR" value="1" /> -->
+
+    <!-- Set value=1 to make all program output go to shell console -->
+    <!-- <env name="WEBOTS_STDOUT" value = "1" /> -->
+
+    <!-- Note: there is a bug where Webots 6.4.4 does not recognize if these variables are set to zero.
+         You should comment them out and start a new console session. -->
+
+    <!-- Start USB Joystick eg. XBox -->
+    <node pkg="joy" type="joy_node" name="joy_node" output="screen" respawn="false" required="true">
+        <param name="dev" type="string" value="/dev/input/js0" />
+        <!-- Joystick center deadzone, default is 0.05%  0.12  -->
+        <param name="deadzone" value="0.2" /> 
+    </node>
+
+    <!-- No need to launch Webots controller node.
+         The controller binary is defined in the Webots *.wbt world file and will be automatically
+         started when the simulator is executed by the 'webots_run' node. -->
+
+    <!-- Start Webots Simulator -->
+    <node pkg="webots_run" type="webots_run" args="$(find nao_webots)/worlds/nao_demo.wbt"
+    name="webots" output="screen" required="true" />
+
+</launch>

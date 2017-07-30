@@ -49,8 +49,10 @@ endif()
 message("WEBOTS HOME: ${WEBOTS_HOME}")
 
 # Webots includes
-#set(WEBOTS_SRC ${WEBOTS_HOME}/include/controller/cpp)
-set(WEBOTS_INCLUDE ${WEBOTS_HOME}/include/controller/cpp)
+set(WEBOTS_INCLUDE
+    ${WEBOTS_HOME}/include/controller/cpp
+    ${WEBOTS_HOME}/include/controller/cpp/utils
+)
 
 # Link executable to Webots C++ Controller Library
 find_library(WEBOTS_CONTROLLER_LIB CppController ${WEBOTS_HOME}/lib)

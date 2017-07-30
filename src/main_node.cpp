@@ -14,8 +14,7 @@ int main(int argc, char** argv)
     // node initialization
     ros::init(argc, argv, "nao_webots");
 
-    nao_webots::NaoWebots bh;
-    ros::spin();
+    nao_webots::NaoWebots nw;
 
     ros::shutdown();
     return EXIT_SUCCESS;

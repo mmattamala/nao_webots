@@ -53,7 +53,9 @@ public:
     ~NaoWebots();
 
     // Joystick callback
-    static void joyCallback(const sensor_msgs::Joy::ConstPtr& joy);
+    void callbackJoy(const sensor_msgs::Joy::ConstPtr& joy);
+    void callbackCamera(const ros::TimerEvent& event);
+    void callbackSensors(const ros::TimerEvent& event);
 
     // Print currently used parameters
     void printParameters();
@@ -63,6 +65,9 @@ public:
 
     // Load motion files
     void loadMotionFiles();
+
+    // main process
+    void mainProcess();
 
 private:
     void simulationStep();
@@ -105,61 +110,62 @@ private:
 
     // Webots devices
     // Cameras
-    boost::shared_ptr<webots::Camera> wb_camera_top_;
-    boost::shared_ptr<webots::Camera> wb_camera_bottom_;
+    webots::Camera* wb_camera_top_;
+    webots::Camera* wb_camera_bottom_;
 
     // Accelerometer
-    boost::shared_ptr<webots::Accelerometer> wb_accelerometer_;
+    webots::Accelerometer* wb_accelerometer_;
 
     // Gyro
-    boost::shared_ptr<webots::Gyro> wb_gyro_;
+    webots::Gyro* wb_gyro_;
 
     // GPS (ground truth)
-    boost::shared_ptr<webots::GPS> wb_gps_;
+    webots::GPS* wb_gps_;
 
     // Inertial Unit (Orientation)
-    boost::shared_ptr<webots::InertialUnit> wb_inertial_unit_;
+    webots::InertialUnit* wb_inertial_unit_;
 
     // Ultrasound sensors
-    boost::shared_ptr<webots::DistanceSensor> wb_sonar_left_;
-    boost::shared_ptr<webots::DistanceSensor> wb_sonar_right_;
+    webots::DistanceSensor* wb_sonar_left_;
+    webots::DistanceSensor* wb_sonar_right_;
 
     // Foot sensors
-    boost::shared_ptr<webots::TouchSensor> wb_fsr_left_;
-    boost::shared_ptr<webots::TouchSensor> wb_fsr_right_;
+    webots::TouchSensor* wb_fsr_left_;
+    webots::TouchSensor* wb_fsr_right_;
 
     // Foot bumpers
-    boost::shared_ptr<webots::TouchSensor> wb_lfoot_bumper_right_;
-    boost::shared_ptr<webots::TouchSensor> wb_foot_bumper_left_;
-    boost::shared_ptr<webots::TouchSensor> wb_rfoot_bumper_right_;
-    boost::shared_ptr<webots::TouchSensor> wb_rfoot_bumper_left_;
+    webots::TouchSensor* wb_lfoot_bumper_right_;
+    webots::TouchSensor* wb_foot_bumper_left_;
+    webots::TouchSensor* wb_rfoot_bumper_right_;
+    webots::TouchSensor* wb_rfoot_bumper_left_;
 
     // Joint encoders
-    boost::shared_ptr<webots::Motor> wb_head_yaw_sensor_;
-    boost::shared_ptr<webots::Motor> wb_head_pitch_sensor_;
-    boost::shared_ptr<webots::Motor> wb_r_shoulder_pitch_sensor_;
-    boost::shared_ptr<webots::Motor> wb_r_shoulder_roll_sensor_;
-    boost::shared_ptr<webots::Motor> wb_r_elbow_yaw_sensor_;
-    boost::shared_ptr<webots::Motor> wb_r_elbow_roll_sensor_;
-    boost::shared_ptr<webots::Motor> wb_l_shoulder_pitch_sensor_;
-    boost::shared_ptr<webots::Motor> wb_l_shoulder_roll_sensor_;
-    boost::shared_ptr<webots::Motor> wb_l_elbow_yaw_sensor_;
-    boost::shared_ptr<webots::Motor> wb_l_elbow_roll_sensor_;
-    boost::shared_ptr<webots::Motor> wb_r_hip_yaw_pitch_sensor_;
-    boost::shared_ptr<webots::Motor> wb_r_hip_roll_sensor_;
-    boost::shared_ptr<webots::Motor> wb_r_hip_pitch_sensor_;
-    boost::shared_ptr<webots::Motor> wb_r_knee_pitch_sensor_;
-    boost::shared_ptr<webots::Motor> wb_r_ankle_pitch_sensor_;
-    boost::shared_ptr<webots::Motor> wb_r_ankle_roll_sensor_;
-    boost::shared_ptr<webots::Motor> wb_l_hip_yaw_pitch_sensor_;
-    boost::shared_ptr<webots::Motor> wb_l_hip_roll_sensor_;
-    boost::shared_ptr<webots::Motor> wb_l_hip_pitch_sensor_;
-    boost::shared_ptr<webots::Motor> wb_l_knee_pitch_sensor_;
-    boost::shared_ptr<webots::Motor> wb_l_ankle_pitch_sensor_;
-    boost::shared_ptr<webots::Motor> wb_l_ankle_roll_sensor_;
+    std::vector<webots::PositionSensor*> wb_joints_;
+    webots::PositionSensor* wb_head_yaw_sensor_;
+    webots::PositionSensor* wb_head_pitch_sensor_;
+    webots::PositionSensor* wb_r_shoulder_pitch_sensor_;
+    webots::PositionSensor* wb_r_shoulder_roll_sensor_;
+    webots::PositionSensor* wb_r_elbow_yaw_sensor_;
+    webots::PositionSensor* wb_r_elbow_roll_sensor_;
+    webots::PositionSensor* wb_l_shoulder_pitch_sensor_;
+    webots::PositionSensor* wb_l_shoulder_roll_sensor_;
+    webots::PositionSensor* wb_l_elbow_yaw_sensor_;
+    webots::PositionSensor* wb_l_elbow_roll_sensor_;
+    webots::PositionSensor* wb_r_hip_yaw_pitch_sensor_;
+    webots::PositionSensor* wb_r_hip_roll_sensor_;
+    webots::PositionSensor* wb_r_hip_pitch_sensor_;
+    webots::PositionSensor* wb_r_knee_pitch_sensor_;
+    webots::PositionSensor* wb_r_ankle_pitch_sensor_;
+    webots::PositionSensor* wb_r_ankle_roll_sensor_;
+    webots::PositionSensor* wb_l_hip_yaw_pitch_sensor_;
+    webots::PositionSensor* wb_l_hip_roll_sensor_;
+    webots::PositionSensor* wb_l_hip_pitch_sensor_;
+    webots::PositionSensor* wb_l_knee_pitch_sensor_;
+    webots::PositionSensor* wb_l_ankle_pitch_sensor_;
+    webots::PositionSensor* wb_l_ankle_roll_sensor_;
 
     // Keyboard
-    boost::shared_ptr<webots::Keyboard> wb_keyboard_;
+    webots::Keyboard* wb_keyboard_;
 
 };
 
