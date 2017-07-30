@@ -81,6 +81,47 @@ void NaoWebots::simulationStep()
 void NaoWebots::callbackCamera(const ros::TimerEvent& event)
 {
     simulationStep();
+
+    ros::Time time = ros::Time::now();
+
+    int image_width = wb_camera_top_->getWidth();
+    int image_height = wb_camera_top_->getHeight();
+
+    // read rgb pixel values from the camera
+    const unsigned char *image = wb_camera_top_->getImage();
+
+
+    sensor_msgs::Image ros_image;
+    sensor_msgs::CameraInfo ros_cam_info;
+
+    // fill image
+    ros_image.encoding = "rgb8";
+    ros_image.height   = image_height;
+    ros_image.width    = image_width;
+    ros_image.step     = 3 * image_width;
+
+    size_t st0 = (ros_image.step * ros_image.height);
+    ros_image.data.resize(st0);
+    ros_image.is_bigendian = 0;
+
+    for (int y = 0; y < image_height; y++)
+    {
+        for (int x = 0; x < image_width; x++)
+        {
+            ros_image.data[3*(y*image_width + x)    ] = wb_camera_top_->imageGetRed(image, image_width, x, y);
+            ros_image.data[3*(y*image_width + x) + 1] = wb_camera_top_->imageGetGreen(image, image_width, x, y);
+            ros_image.data[3*(y*image_width + x) + 2] = wb_camera_top_->imageGetBlue(image, image_width, x, y);
+        }
+    }
+
+    // fill camera info
+    ros_cam_info.height = image_height;
+    ros_cam_info.width = image_width;
+    ros_cam_info.header.stamp = time;
+    ros_cam_info.header.frame_id = "/CameraTop_optical_frame";
+
+    // publish image
+    cam_publisher_.publish(ros_image, ros_cam_info);
 }
 
 void NaoWebots::callbackSensors(const ros::TimerEvent& event)
