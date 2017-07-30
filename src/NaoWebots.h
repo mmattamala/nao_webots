@@ -69,6 +69,9 @@ public:
     // main process
     void mainProcess();
 
+    // Utils
+    void publishCamera(ros::Time &time, webots::Camera *webots_camera, image_transport::CameraPublisher &camera_publisher, const std::string &topic);
+
 private:
     void simulationStep();
 
@@ -82,7 +85,8 @@ private:
     ros::Publisher imu_publisher_;
     ros::Publisher joint_state_publisher_;
     ros::Publisher fsr_publisher_;
-    image_transport::CameraPublisher cam_publisher_;
+    image_transport::CameraPublisher cam_upper_publisher_;
+    image_transport::CameraPublisher cam_lower_publisher_;
 
     ros::Subscriber joy_subscriber_;
 

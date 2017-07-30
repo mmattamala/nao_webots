@@ -42,7 +42,8 @@ NaoWebots::NaoWebots() : node_handle_("~"), Robot()
 
     // Image topic
     image_transport::ImageTransport it(node_handle_);
-    cam_publisher_  = it.advertiseCamera("camera/image_raw", 1);
+    cam_upper_publisher_  = it.advertiseCamera("camera/upper/image_raw", 1);
+    cam_lower_publisher_  = it.advertiseCamera("camera/lower/image_raw", 1);
 
     // Initialize robot
     time_step_ = getBasicTimeStep();
@@ -84,12 +85,18 @@ void NaoWebots::callbackCamera(const ros::TimerEvent& event)
 
     ros::Time time = ros::Time::now();
 
-    int image_width = wb_camera_top_->getWidth();
-    int image_height = wb_camera_top_->getHeight();
+    publishCamera(time, wb_camera_top_, cam_upper_publisher_, "/CameraTop_optical_frame");
+    publishCamera(time, wb_camera_bottom_, cam_lower_publisher_, "/CameraBottom_optical_frame");
+}
+
+void NaoWebots::publishCamera(ros::Time& time, webots::Camera *webots_camera, image_transport::CameraPublisher& camera_publisher, const std::string &topic)
+{
+    // update upper camera
+    int image_width  = webots_camera->getWidth();
+    int image_height = webots_camera->getHeight();
 
     // read rgb pixel values from the camera
-    const unsigned char *image = wb_camera_top_->getImage();
-
+    const unsigned char *image = webots_camera->getImage();
 
     sensor_msgs::Image ros_image;
     sensor_msgs::CameraInfo ros_cam_info;
@@ -108,9 +115,9 @@ void NaoWebots::callbackCamera(const ros::TimerEvent& event)
     {
         for (int x = 0; x < image_width; x++)
         {
-            ros_image.data[3*(y*image_width + x)    ] = wb_camera_top_->imageGetRed(image, image_width, x, y);
-            ros_image.data[3*(y*image_width + x) + 1] = wb_camera_top_->imageGetGreen(image, image_width, x, y);
-            ros_image.data[3*(y*image_width + x) + 2] = wb_camera_top_->imageGetBlue(image, image_width, x, y);
+            ros_image.data[3*(y*image_width + x)    ] = webots_camera->imageGetRed(image, image_width, x, y);
+            ros_image.data[3*(y*image_width + x) + 1] = webots_camera->imageGetGreen(image, image_width, x, y);
+            ros_image.data[3*(y*image_width + x) + 2] = webots_camera->imageGetBlue(image, image_width, x, y);
         }
     }
 
@@ -118,10 +125,10 @@ void NaoWebots::callbackCamera(const ros::TimerEvent& event)
     ros_cam_info.height = image_height;
     ros_cam_info.width = image_width;
     ros_cam_info.header.stamp = time;
-    ros_cam_info.header.frame_id = "/CameraTop_optical_frame";
+    ros_cam_info.header.frame_id = topic;
 
     // publish image
-    cam_publisher_.publish(ros_image, ros_cam_info);
+    camera_publisher.publish(ros_image, ros_cam_info);
 }
 
 void NaoWebots::callbackSensors(const ros::TimerEvent& event)
