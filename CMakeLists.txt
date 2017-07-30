@@ -87,7 +87,7 @@ target_link_libraries("${PROJECT_NAME}_node"
 
 ## Copy the executable into the controllers folder
 ## TODO: Find a clever way to do this
-set(EXECUTABLE_PATH /home/matias/catkin_ws/devel/lib/nao_webots/nao_webots_node)
+set(EXECUTABLE_PATH ${HOME}/catkin_ws/devel/lib/nao_webots/nao_webots_node)
 set(WEBOTS_CONTROLLER_PATH ${WEBOTS_HOME}/projects/robots/aldebaran/controllers/nao_webots_node/)
 
 file(MAKE_DIRECTORY ${WEBOTS_CONTROLLER_PATH})
@@ -98,6 +98,3 @@ if(EXISTS ${EXECUTABLE_PATH})
 else()
     message("-- WARNING: Controller not compiled yet")
 endif()
-
-#install(TARGETS "${PROJECT_NAME}_node"
-#        RUNTIME DESTINATION ${WEBOTS_CONTROLLER_PATH})
