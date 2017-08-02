@@ -2,7 +2,7 @@
 <package>
   <name>nao_webots</name>
   <version>0.0.0</version>
-  <description>An interface between the NAO and ROS for Webots simulator</description>
+  <description>A Webots-compatible package for the NAO robot</description>
 
   <maintainer email="mmattamala@ing.uchile.cl">Matias Mattamala</maintainer>
   <author email="mmattamala@ing.uchile.cl">Matias Mattamala</author>
@@ -17,10 +17,12 @@
   <build_depend>std_msgs</build_depend>
   <build_depend>image_transport</build_depend>
   <build_depend>CppController</build_depend>
+  <build_depend>tf</build_depend>
   <run_depend>roscpp</run_depend>
   <run_depend>std_msgs</run_depend>
   <run_depend>image_transport</run_depend>
   <run_depend>CppController</run_depend>
+  <run_depend>tf</run_depend>
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>

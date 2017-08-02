@@ -7,8 +7,8 @@
  * @author <a href="mailto:mmattamala@ing.uchile.cl">Matias Mattamala</a>
  */
 
- #ifndef NAOWEBOTS_H
- #define NAOWEBOTS_H
+ #ifndef NAOCONTROLLER_H
+ #define NAOCONTROLLER_H
 
 // Webots stuff
 #include <webots/utils/Motion.hpp>
@@ -31,7 +31,8 @@
 #include <sensor_msgs/Joy.h>
 #include <sensor_msgs/Imu.h>
 #include <sensor_msgs/JointState.h>
-#include <geometry_msgs/PointStamped.h>
+#include <std_msgs/Float64MultiArray.h>
+#include <tf/transform_broadcaster.h>
 
 // Boost
 //#include <boost/thread.hpp>
@@ -43,19 +44,22 @@
 
 namespace nao_webots {
 
-class NaoWebots : public webots::Robot
+class NaoController :
+        public webots::Robot
 {
 public:
     // Default Constructor
-    NaoWebots();
+    NaoController();
 
     // Default destructor
-    ~NaoWebots();
+    ~NaoController();
 
-    // Joystick callback
+private:
+    // callbacks
     void callbackJoy(const sensor_msgs::Joy::ConstPtr& joy);
     void callbackCamera(const ros::TimerEvent& event);
     void callbackSensors(const ros::TimerEvent& event);
+    void callbackKeyboard(const ros::TimerEvent& event);
 
     // Print currently used parameters
     void printParameters();
@@ -65,15 +69,21 @@ public:
 
     // Load motion files
     void loadMotionFiles();
+    void startMotion(webots::Motion* motion);
 
-    // main process
-    void mainProcess();
-
-    // Utils
+    // Publish ROS data
     void publishCamera(ros::Time &time, webots::Camera *webots_camera, image_transport::CameraPublisher &camera_publisher, const std::string &topic);
+    void publishJointState(ros::Time& time);
+    void publishIMU(ros::Time& time);
+    void publishFSR(ros::Time& time);
+    void publishGroundTruth(ros::Time& time);
 
-private:
-    void simulationStep();
+    // run simulation step
+    bool simulationStep();
+
+    // utils
+    double clamp(double value, double min, double max);
+
 
 private:
     int time_step_;
@@ -102,8 +112,9 @@ private:
     std::string wb_file_motion_turn_left_;
     std::string wb_file_motion_turn_right_;
 
-
     // Webots Motions
+    webots::Motion* wb_motion_current_;
+
     webots::Motion* wb_motion_hand_wave_;
     webots::Motion* wb_motion_forward_;
     webots::Motion* wb_motion_backward_;
@@ -170,8 +181,8 @@ private:
 
     // Keyboard
     webots::Keyboard* wb_keyboard_;
-
 };
 
+
 } //nao_webots
-#endif // NAOWEBOTS_H
+#endif // NAOCONTROLLER_H

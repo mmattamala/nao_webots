@@ -10,6 +10,7 @@ find_package(catkin REQUIRED COMPONENTS
   cv_bridge
   image_transport
   message_generation
+  tf
 )
 
 find_package(Boost REQUIRED COMPONENTS thread)
@@ -46,7 +47,7 @@ else()
     set(WEBOTS_HOME /usr/local/webots)
 endif()
 
-message("WEBOTS HOME: ${WEBOTS_HOME}")
+#message("WEBOTS HOME: ${WEBOTS_HOME}")
 
 # Webots includes
 set(WEBOTS_INCLUDE
@@ -58,9 +59,14 @@ set(WEBOTS_INCLUDE
 find_library(WEBOTS_CONTROLLER_LIB CppController ${WEBOTS_HOME}/lib)
 
 ## Set source files
-list(APPEND SRC_FILES
-    src/NaoWebots.cpp
-    src/NaoWebots.h
+list(APPEND SRC_SUPERVISOR_FILES
+    src/NaoSupervisor.cpp
+    src/NaoSupervisor.h
+)
+
+list(APPEND SRC_CONTROLLER_FILES
+    src/NaoController.cpp
+    src/NaoController.h
 )
 
 ## Catkin package
@@ -76,25 +82,41 @@ include_directories(include
   src
 )
 
-## Declare a C++ executable
-add_executable("${PROJECT_NAME}_node" src/main_node.cpp ${SRC_FILES})
+## TODO: Find a clever way to do this
+#set(EXECUTABLE_PATH $ENV{HOME}/catkin_ws/devel/lib/nao_webots/nao_webots_node)
+set(WEBOTS_CONTROLLER_PATH ${WEBOTS_HOME}/resources/projects/controllers)
+
+
+## Supervisor node
+add_executable(nao_supervisor_node src/supervisor_node.cpp ${SRC_SUPERVISOR_FILES})
+
+## Controller node
+add_executable(nao_controller_node src/controller_node.cpp ${SRC_CONTROLLER_FILES})
+
 
 ## Specify libraries to link a library or executable target against
-target_link_libraries("${PROJECT_NAME}_node"
+target_link_libraries(nao_controller_node
   ${catkin_LIBRARIES}
   ${WEBOTS_CONTROLLER_LIB}
 )
 
-## Copy the executable into the controllers folder
-## TODO: Find a clever way to do this
-set(EXECUTABLE_PATH ${HOME}/catkin_ws/devel/lib/nao_webots/nao_webots_node)
-set(WEBOTS_CONTROLLER_PATH ${WEBOTS_HOME}/projects/robots/aldebaran/controllers/nao_webots_node/)
+target_link_libraries(nao_supervisor_node
+  ${catkin_LIBRARIES}
+  ${WEBOTS_CONTROLLER_LIB}
+)
 
-file(MAKE_DIRECTORY ${WEBOTS_CONTROLLER_PATH})
-execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory ${WEBOTS_CONTROLLER_PATH})
+# copy executables to webots folder
+add_custom_command(TARGET nao_supervisor_node POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E make_directory "${WEBOTS_CONTROLLER_PATH}/nao_supervisor_node/"
+    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:nao_supervisor_node> "${WEBOTS_CONTROLLER_PATH}/nao_supervisor_node/"
+)
 
-if(EXISTS ${EXECUTABLE_PATH})
-    configure_file(${EXECUTABLE_PATH} ${WEBOTS_CONTROLLER_PATH} COPYONLY)
-else()
-    message("-- WARNING: Controller not compiled yet")
-endif()
+add_custom_command(TARGET nao_controller_node POST_BUILD
+    #COMMAND ${CMAKE_COMMAND} -E make_directory "${WEBOTS_CONTROLLER_PATH}/nao_controller_node/"
+    #COMMAND ${CMAKE_COMMAND} -E make_directory "${WEBOTS_CONTROLLER_PATH}/nao_controller_node/motions"
+    COMMAND ${CMAKE_COMMAND} -E make_directory "${WEBOTS_CONTROLLER_PATH}/nao_controller_node/"
+    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:nao_controller_node> "${WEBOTS_CONTROLLER_PATH}/nao_controller_node/"
+    #COMMAND ${CMAKE_COMMAND} -E copy_directory "${PROJECT_SOURCE_DIR}/motions" "${WEBOTS_CONTROLLER_PATH}/nao_controller_node/"
+    #COMMAND ln -sf "${PROJECT_SOURCE_DIR}/motions/*.motion" "${WEBOTS_CONTROLLER_PATH}/nao_controller_node/motions/"
+    COMMAND ln -sf "${PROJECT_SOURCE_DIR}/motions" "${WEBOTS_CONTROLLER_PATH}/nao_controller_node/motions"
+)

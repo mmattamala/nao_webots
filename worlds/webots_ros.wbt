@@ -7,8 +7,8 @@ WorldInfo {
     "The sensors include 2 cameras, 4 microphones, sonar rangefinder, 2 IR emitters and receivers, 1 inertial board, and 8 pressure sensors."
   ]
   title "Aldebaran's Nao"
-  basicTimeStep 1
-  FPS 100
+  basicTimeStep 20
+  FPS 20
   contactProperties [
     ContactProperties {
       material1 "NAO foot material"
@@ -40,8 +40,12 @@ Floor {
     "textures/checkered_marble.jpg"
   ]
 }
+Supervisor {
+  controller "nao_supervisor_node"
+}
+
 Nao {
-  controller "nao_webots_node"
+  controller "nao_controller_node"
   cameraWidth 320
   cameraHeight 240
 }

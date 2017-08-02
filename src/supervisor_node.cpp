@@ -6,15 +6,15 @@
  */
 
 
-#include "NaoWebots.h"
+#include "NaoSupervisor.h"
 
 // Main
 int main(int argc, char** argv)
 {
     // node initialization
-    ros::init(argc, argv, "nao_webots");
+    ros::init(argc, argv, "nao_supervisor_node");
 
-    nao_webots::NaoWebots nw;
+    nao_webots::NaoSupervisor ns;
 
     ros::shutdown();
     return EXIT_SUCCESS;
