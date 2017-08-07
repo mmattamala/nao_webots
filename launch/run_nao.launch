@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<launch>
+	<arg name="version"  default="V50"  doc="The NAO version currently used" />
+	<arg name="use_torso_gt_tf"  default="false"  doc="A flag to enable the publication of transformation between ground truth and NAO description's base_link" />
+
+	<!-- NAO description -->
+	<!-- Dependency: NAO description -->
+	<include file="$(find nao_description)/launch/upload_nao.launch" >
+		<arg name="version" value="$(arg version)" />
+	</include>
+
+	<!-- Launch complete robot model with base_footprint -->
+	<node pkg="nao_description" type="base_footprint" name="base_footprint"/>
+
+	<!-- Load the robot state publisher -->
+	<node pkg="robot_state_publisher" type="state_publisher" name="robot_state_publisher">
+		<param name="publish_frequency" type="double" value="2000.0"/>
+		<param name="use_tf_static" type="bool" value="true"/>
+		<param name="ignore_timestamp" type="bool" value="false"/>
+	</node>
+
+	<arg name="config_file" value="$(find nao_webots)/rviz/nao_test.rviz"/>
+	<node name="$(anon rviz)" pkg="rviz" type="rviz" respawn="false" output="screen" args="-d $(arg config_file)" />
+
+	<!-- No need to launch Webots controller node.
+	     The controller binary is defined in the Webots *.wbt world file and will be automatically
+	     started when the simulator is executed by the 'webots_run' node. -->
+
+	<!-- Start Webots Simulator -->
+	<node pkg="webots_run" type="webots_run" args="$(find nao_webots)/worlds/webots_ros_forest.wbt" name="webots" output="screen" required="true" />
+
+</launch>

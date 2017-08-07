@@ -118,5 +118,5 @@ add_custom_command(TARGET nao_controller_node POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:nao_controller_node> "${WEBOTS_CONTROLLER_PATH}/nao_controller_node/"
     #COMMAND ${CMAKE_COMMAND} -E copy_directory "${PROJECT_SOURCE_DIR}/motions" "${WEBOTS_CONTROLLER_PATH}/nao_controller_node/"
     #COMMAND ln -sf "${PROJECT_SOURCE_DIR}/motions/*.motion" "${WEBOTS_CONTROLLER_PATH}/nao_controller_node/motions/"
-    COMMAND ln -sf "${PROJECT_SOURCE_DIR}/motions" "${WEBOTS_CONTROLLER_PATH}/nao_controller_node/motions"
+    COMMAND ln -sf "${PROJECT_SOURCE_DIR}/motions" "${WEBOTS_CONTROLLER_PATH}/nao_controller_node/"
 )

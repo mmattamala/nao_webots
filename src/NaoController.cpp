@@ -217,7 +217,7 @@ void NaoController::publishJointState(ros::Time& time)
     ros_joints.position[4]  = wb_l_hip_pitch_sensor_->getValue();
 
     ros_joints.name[5]      = "LKneePitch";
-    ros_joints.position[5]  = wb_l_knee_pitch_sensor_->getType();
+    ros_joints.position[5]  = wb_l_knee_pitch_sensor_->getValue();
 
     ros_joints.name[6]      = "LAnklePitch";
     ros_joints.position[6]  = wb_l_ankle_pitch_sensor_->getValue();

@@ -21,13 +21,14 @@ NaoSupervisor::NaoSupervisor() :
 {
     // Read communication parameters from parameter server
     node_handle_.param("rate", rate_, 100);
+    node_handle_.param("robot_name", robot_name_, std::string("NAO_ROBOT"));
+    node_handle_.param("use_torso_gt_tf", use_torso_gt_tf_, false);
 
     // Initialize robot
     time_step_ = getBasicTimeStep();
     ROS_WARN("TIME STEP: %d", time_step_);
 
-    wb_robot_node_ = getFromDef("nao");
-
+    wb_robot_node_ = getFromDef(robot_name_);
 
     // prepare timers for publication
     ros::Timer timer_ground_truth  = node_handle_.createTimer(ros::Duration(1.0/rate_), &NaoSupervisor::callbackGroundTruth, this);
@@ -48,24 +49,26 @@ bool NaoSupervisor::simulationStep()
 
 void NaoSupervisor::callbackGroundTruth(const ros::TimerEvent &event)
 {
-    wb_robot_node_ = getFromDef("nao");
+    //wb_robot_node_ = getFromDef(robot_name_);
 
-    ROS_WARN("callback ground truth");
     simulationStep();
 
     const double* p = wb_robot_node_->getPosition();
-    ROS_WARN("got position");
     const double *R = wb_robot_node_->getOrientation();
-    ROS_WARN("got orientation");
 
-    tf::TransformBroadcaster br;
-    tf::Transform transform;
-    transform.setOrigin(webotsPositionToROSPosition(p));
-    ROS_WARN("set position");
-    transform.setRotation(webotsRotationToROSRotation(R));
-    ROS_WARN("set orientation");
-    br.sendTransform(tf::StampedTransform(transform, ros::Time::now(), "world", "gt_torso"));
-    ROS_WARN("sent transform");
+    static tf::TransformBroadcaster br;
+    tf::Transform Tgt;
+    Tgt.setOrigin(webotsPositionToROSPosition(p));
+    Tgt.setRotation(webotsRotationToROSRotation(R));
+    br.sendTransform(tf::StampedTransform(Tgt, ros::Time::now(), "world", "gt_torso"));
+
+    if(use_torso_gt_tf_)
+    {
+        tf::Transform Tgt_t;
+        Tgt_t.setOrigin(tf::Vector3(0,0,0));
+        Tgt_t.setRotation(tf::Quaternion(0,0,0));
+        br.sendTransform(tf::StampedTransform(Tgt_t, ros::Time::now(), "gt_torso", "base_link"));
+    }
 }
 
 tf::Vector3 NaoSupervisor::webotsPositionToROSPosition(const double* p)
@@ -93,7 +96,9 @@ tf::Quaternion NaoSupervisor::webotsRotationToROSRotation(const double* R)
     //  | R[6] -R[8] R[7] |
 
     tf::Matrix3x3 Rot;
-    Rot.setValue(R[0], -R[2], R[1], R[3], -R[5], R[4], R[6], -R[8], R[7]);
+    Rot.setValue( R[0],  R[1],  R[2],
+                 -R[6], -R[7], -R[8],
+                  R[3],  R[4],  R[5]);
     double roll, pitch, yaw;
     Rot.getRPY(roll, pitch, yaw);
 

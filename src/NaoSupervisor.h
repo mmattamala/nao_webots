@@ -65,12 +65,14 @@ private:
 
 private:
     int time_step_;
+    std::string robot_name_;
 
     // Node handle
     ros::NodeHandle node_handle_;
 
     // parameters
     int rate_;
+    bool use_torso_gt_tf_;
 
     // Robot node
     webots::Node* wb_robot_node_;

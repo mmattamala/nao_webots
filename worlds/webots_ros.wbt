@@ -40,12 +40,16 @@ Floor {
     "textures/checkered_marble.jpg"
   ]
 }
-Supervisor {
-  controller "nao_supervisor_node"
-}
 
-Nao {
+DEF NAO_ROBOT Nao {
   controller "nao_controller_node"
   cameraWidth 320
   cameraHeight 240
 }
+
+Supervisor {
+  name "ROS Supervisor"
+  controller "nao_supervisor_node"
+}
+
+
