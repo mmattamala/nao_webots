@@ -41,6 +41,8 @@ NaoController::NaoController() :
     fsr_publisher_ = node_handle_.advertise<std_msgs::Float64MultiArray>("/fsr", 1);
     fsr_l_publisher_ = node_handle_.advertise<naoqi_bridge_msgs::FloatArrayStamped>("/fsr_l", 1);
     fsr_r_publisher_ = node_handle_.advertise<naoqi_bridge_msgs::FloatArrayStamped>("/fsr_r", 1);
+    fsr_l_total_publisher_ = node_handle_.advertise<naoqi_bridge_msgs::FloatStamped>("/fsr_l_total", 1);
+    fsr_r_total_publisher_ = node_handle_.advertise<naoqi_bridge_msgs::FloatStamped>("/fsr_r_total", 1);
     // Joints state
     joint_state_publisher_ = node_handle_.advertise<sensor_msgs::JointState>("/joint_states", 1);
 
@@ -330,6 +332,14 @@ void NaoController::publishFSR(ros::Time &time)
     ros_fsr_r.header.stamp = time;
     ros_fsr_r.header.frame_id = "/r_sole";
 
+    naoqi_bridge_msgs::FloatStamped ros_fsr_l_total;
+    ros_fsr_l_total.header.stamp = time;
+    ros_fsr_l_total.header.frame_id = "/l_sole";
+
+    naoqi_bridge_msgs::FloatStamped ros_fsr_r_total;
+    ros_fsr_r_total.header.stamp = time;
+    ros_fsr_r_total.header.frame_id = "/r_sole";
+
     const double* l_fsr = wb_fsr_left_->getValues();
     const double* r_fsr = wb_fsr_right_->getValues();
 
@@ -360,18 +370,20 @@ void NaoController::publishFSR(ros::Time &time)
     ros_fsr_l.data.push_back(l[1]);
     ros_fsr_l.data.push_back(l[2]);
     ros_fsr_l.data.push_back(l[3]);
-    //ros_fsr_l.data.push_back(l_total);
+    ros_fsr_l_total.data = l_total;
 
     // fill right foot
     ros_fsr_r.data.push_back(l[0]);
     ros_fsr_r.data.push_back(l[1]);
     ros_fsr_r.data.push_back(l[2]);
     ros_fsr_r.data.push_back(l[3]);
-    //ros_fsr_r.data.push_back(r_total);
+    ros_fsr_r_total.data = r_total;
 
     // publish
     fsr_l_publisher_.publish(ros_fsr_l);
     fsr_r_publisher_.publish(ros_fsr_r);
+    fsr_l_total_publisher_.publish(ros_fsr_l_total);
+    fsr_r_total_publisher_.publish(ros_fsr_r_total);
 }
 
 
