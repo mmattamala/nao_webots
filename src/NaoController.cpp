@@ -39,6 +39,8 @@ NaoController::NaoController() :
     imu_publisher_ = node_handle_.advertise<sensor_msgs::Imu>("/imu/data_raw", 1);
     // FSR
     fsr_publisher_ = node_handle_.advertise<std_msgs::Float64MultiArray>("/fsr", 1);
+    fsr_l_publisher_ = node_handle_.advertise<naoqi_bridge_msgs::FloatArrayStamped>("/fsr_l", 1);
+    fsr_r_publisher_ = node_handle_.advertise<naoqi_bridge_msgs::FloatArrayStamped>("/fsr_r", 1);
     // Joints state
     joint_state_publisher_ = node_handle_.advertise<sensor_msgs::JointState>("/joint_states", 1);
 
@@ -319,6 +321,61 @@ void NaoController::publishIMU(ros::Time &time)
 }
 
 void NaoController::publishFSR(ros::Time &time)
+{
+    naoqi_bridge_msgs::FloatArrayStamped ros_fsr_l;
+    ros_fsr_l.header.stamp = time;
+    ros_fsr_l.header.frame_id = "/l_sole";
+
+    naoqi_bridge_msgs::FloatArrayStamped ros_fsr_r;
+    ros_fsr_r.header.stamp = time;
+    ros_fsr_r.header.frame_id = "/r_sole";
+
+    const double* l_fsr = wb_fsr_left_->getValues();
+    const double* r_fsr = wb_fsr_right_->getValues();
+
+    double l[4], r[4];
+    // here we use the same equations as nao_demo.wrbt C code
+    l[0] = l_fsr[2]/3.4 + 1.5*l_fsr[0] + 1.15*l_fsr[1]; // Left Foot Front Left
+    l[1] = l_fsr[2]/3.4 + 1.5*l_fsr[0] - 1.15*l_fsr[1]; // Left Foot Front Right
+    l[2] = l_fsr[2]/3.4 - 1.5*l_fsr[0] - 1.15*l_fsr[1]; // Left Foot Rear Right
+    l[3] = l_fsr[2]/3.4 - 1.5*l_fsr[0] + 1.15*l_fsr[1]; // Left Foot Rear Left
+
+    r[0] = r_fsr[2]/3.4 + 1.5*r_fsr[0] + 1.15*r_fsr[1]; // Right Foot Front Left
+    r[1] = r_fsr[2]/3.4 + 1.5*r_fsr[0] - 1.15*r_fsr[1]; // Right Foot Front Right
+    r[2] = r_fsr[2]/3.4 - 1.5*r_fsr[0] - 1.15*r_fsr[1]; // Right Foot Rear Right
+    r[3] = r_fsr[2]/3.4 - 1.5*r_fsr[0] + 1.15*r_fsr[1]; // Right Foot Rear Left
+
+    double l_total = 0;
+    double r_total = 0;
+    for(int i=0;i<4; i++)
+    {
+        l[i] = clamp(l[i], 0.0, 25.0);
+        r[i] = clamp(r[i], 0.0, 25.0);
+        l_total += l[i];
+        r_total += r[i];
+    }
+
+    // fill left foot
+    ros_fsr_l.data.push_back(l[0]);
+    ros_fsr_l.data.push_back(l[1]);
+    ros_fsr_l.data.push_back(l[2]);
+    ros_fsr_l.data.push_back(l[3]);
+    //ros_fsr_l.data.push_back(l_total);
+
+    // fill right foot
+    ros_fsr_r.data.push_back(l[0]);
+    ros_fsr_r.data.push_back(l[1]);
+    ros_fsr_r.data.push_back(l[2]);
+    ros_fsr_r.data.push_back(l[3]);
+    //ros_fsr_r.data.push_back(r_total);
+
+    // publish
+    fsr_l_publisher_.publish(ros_fsr_l);
+    fsr_r_publisher_.publish(ros_fsr_r);
+}
+
+
+void NaoController::publishFSR2(ros::Time &time)
 {
     std_msgs::Float64MultiArray ros_fsr;
 

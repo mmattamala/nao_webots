@@ -11,6 +11,7 @@ find_package(catkin REQUIRED COMPONENTS
   image_transport
   message_generation
   tf
+  naoqi_bridge_msgs
 )
 
 find_package(Boost REQUIRED COMPONENTS thread)

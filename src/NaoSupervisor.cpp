@@ -66,7 +66,7 @@ void NaoSupervisor::callbackGroundTruth(const ros::TimerEvent &event)
     {
         tf::Transform Tgt_t;
         Tgt_t.setOrigin(tf::Vector3(0,0,0));
-        Tgt_t.setRotation(tf::Quaternion(0,0,0));
+        Tgt_t.setRotation(tf::Quaternion(0,0,0,1.0));
         br.sendTransform(tf::StampedTransform(Tgt_t, ros::Time::now(), "gt_torso", "base_link"));
     }
 }

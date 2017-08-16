@@ -33,6 +33,7 @@
 #include <sensor_msgs/JointState.h>
 #include <std_msgs/Float64MultiArray.h>
 #include <tf/transform_broadcaster.h>
+#include <naoqi_bridge_msgs/FloatArrayStamped.h>
 
 // Boost
 //#include <boost/thread.hpp>
@@ -76,6 +77,7 @@ private:
     void publishJointState(ros::Time& time);
     void publishIMU(ros::Time& time);
     void publishFSR(ros::Time& time);
+    void publishFSR2(ros::Time& time);
     void publishGroundTruth(ros::Time& time);
 
     // run simulation step
@@ -94,6 +96,8 @@ private:
     // ROS publishers and subscribers
     ros::Publisher imu_publisher_;
     ros::Publisher joint_state_publisher_;
+    ros::Publisher fsr_l_publisher_;
+    ros::Publisher fsr_r_publisher_;
     ros::Publisher fsr_publisher_;
     image_transport::CameraPublisher cam_upper_publisher_;
     image_transport::CameraPublisher cam_lower_publisher_;
