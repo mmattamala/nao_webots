@@ -33,6 +33,7 @@
 #include <sensor_msgs/JointState.h>
 #include <std_msgs/Float64MultiArray.h>
 #include <tf/transform_broadcaster.h>
+#include <tf/tf.h>
 #include <naoqi_bridge_msgs/FloatArrayStamped.h>
 #include <naoqi_bridge_msgs/FloatStamped.h>
 
@@ -86,7 +87,6 @@ private:
 
     // utils
     double clamp(double value, double min, double max);
-
 
 private:
     int time_step_;

@@ -299,9 +299,12 @@ void NaoController::publishIMU(ros::Time &time)
 
     // fill orientation
     const double* roll_pitch_yaw = wb_inertial_unit_->getRollPitchYaw();
-    ros_imu.orientation.x = roll_pitch_yaw[0];
-    ros_imu.orientation.y = roll_pitch_yaw[1];
-    ros_imu.orientation.z = roll_pitch_yaw[2];
+    tf::Quaternion q;
+    q.setRPY(roll_pitch_yaw[0], roll_pitch_yaw[1], roll_pitch_yaw[2]);
+    ros_imu.orientation.x = q.x();
+    ros_imu.orientation.y = q.y();
+    ros_imu.orientation.z = q.z();
+    ros_imu.orientation.w = q.w();
     //rosIMU.orientation = {0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0};
 
     // fill gyro

@@ -22,7 +22,7 @@ WorldInfo {
 }
 Viewpoint {
   orientation -0.39767614 -0.78723209 -0.47129537 1.898696
-  position -14.996064 25.848007 5.3738293
+  position -12.171897 20.926372 5.5350536
 }
 TexturedBackground {
 }
@@ -43,82 +43,82 @@ Floor {
 Forest {
 }
 DEF NAO_ROBOT NaoV5 {
-  hidden position_0_0 7.91143e-11
-  hidden position2_0_0 -5.97369e-09
-  hidden position_0_1 1.745
-  hidden position2_0_1 -0.349
-  hidden position_0_2 1.745
+  hidden position_0_0 7.05857e-11
+  hidden position2_0_0 -1.20582e-08
+  hidden position_0_1 1.4
+  hidden position2_0_1 6.89816e-09
+  hidden position_0_2 1.49797
   hidden position2_0_2 0.349
-  hidden position_0_3 -1.60302e-05
-  hidden position_0_4 1.52405e-05
-  hidden rotation_18 -0.17180099 0.97451986 -0.14420633 1.7703604
+  hidden position_0_3 -1.69761e-05
+  hidden position_0_4 1.56655e-05
+  hidden rotation_18 3.4490785e-9 1 4.0948892e-9 1.4000003
   hidden position_18_0 1.396
-  hidden rotation_19 1 0 0 1.3959998
+  hidden rotation_19 1 0 0 1.396
   hidden position_19_0 1.396
   hidden rotation_20 0 0 1 1.3959998
-  hidden position_20_0 3.88707e-09
-  hidden position_21_0 5.38429e-11
-  hidden position_21_1 5.38488e-11
-  hidden position_21_2 2.90239e-11
+  hidden position_20_0 4.67755e-09
+  hidden position_21_0 5.61619e-11
+  hidden position_21_1 5.61721e-11
+  hidden position_21_2 2.95008e-11
   hidden rotation_22 0 1 0 0.96
-  hidden position_22_0 1.05429e-10
+  hidden position_22_0 1.07729e-10
   hidden rotation_23 0 1 0 0.96
-  hidden position_23_0 3.43094e-11
+  hidden position_23_0 3.28862e-11
   hidden rotation_24 0 1 0 0.96
   hidden rotation_25 0 1 0 0.96
-  hidden position_25_0 1.05427e-10
+  hidden position_25_0 1.07685e-10
   hidden rotation_26 0 1 0 0.96
-  hidden position_26_0 2.46077e-11
+  hidden position_26_0 2.53076e-11
   hidden rotation_27 0 1 0 0.96
-  hidden position_28_0 7.0061e-13
+  hidden position_28_0 1.30799e-12
   hidden rotation_29 0 -1 0 0.96
-  hidden rotation_30 0.17180099 0.97451986 0.14420633 1.7703604
+  hidden rotation_30 0.17066537 0.96807822 0.18356987 1.5303592
   hidden position_30_0 -1.396
-  hidden rotation_31 -1 0 0 1.3959998
+  hidden rotation_31 -1 0 0 1.3959999
   hidden position_31_0 -1.396
   hidden rotation_32 0 0 -1 1.3959998
-  hidden position_32_0 -3.8891e-09
-  hidden position_33_0 -8.44186e-11
-  hidden position_33_1 -8.52411e-11
-  hidden position_33_2 2.87631e-11
+  hidden position_32_0 -3.67955e-09
+  hidden position_33_0 -8.26643e-11
+  hidden position_33_1 2.08521e-10
+  hidden position_33_2 2.66008e-11
   hidden rotation_34 0 1 0 0.96
-  hidden position_34_0 3.77384e-11
+  hidden position_34_0 3.8934e-11
   hidden rotation_35 0 1 0 0.96
-  hidden position_35_0 7.54559e-12
+  hidden position_35_0 7.81724e-12
   hidden rotation_36 0 1 0 0.96
   hidden rotation_37 0 1 0 0.96
-  hidden position_37_0 3.77484e-11
+  hidden position_37_0 3.8954e-11
   hidden rotation_38 0 1 0 0.96
-  hidden position_38_0 2.46225e-11
+  hidden position_38_0 2.48929e-11
   hidden rotation_39 0 1 0 0.96
-  hidden position_40_0 9.49605e-12
+  hidden position_40_0 1.00406e-11
   hidden rotation_41 0 -1 0 0.96
-  hidden position_42_0 -0.0316095
-  hidden rotation_43 -1 0 0 0.031609473
+  hidden position_42_0 -0.0316096
+  hidden rotation_43 -1 0 0 0.031609623
   hidden position_43_0 -0.502985
-  hidden rotation_44 0 -1 0 0.50298516
+  hidden rotation_44 0 -1 0 0.50298547
   hidden position_44_0 1.04301
-  hidden rotation_45 0 1 0 1.0430108
-  hidden position_45_0 -0.539997
-  hidden rotation_46 0 -1 0 0.5399971
+  hidden rotation_45 0 1 0 1.0430101
+  hidden position_45_0 -0.539998
+  hidden rotation_46 0 -1 0 0.53999792
   hidden position_46_0 0.0309969
-  hidden rotation_47 1 0 0 0.030996941
-  hidden translation_48 0.019873228 -0.0071472698 -0.040852855
-  hidden rotation_48 1.1704452e-7 6.9484851e-8 1 -3.1415782
+  hidden rotation_47 1 0 0 0.03099687
+  hidden translation_48 0.019873111 -0.0071473928 -0.040804568
+  hidden rotation_48 -3.1382263e-7 -7.6403024e-8 1 -3.1415782
   hidden position_52_0 -0.030985
-  hidden rotation_53 -1 0 0 0.030984979
+  hidden rotation_53 -1 0 0 0.030984988
   hidden position_53_0 -0.507025
-  hidden rotation_54 0 -1 0 0.5070255
+  hidden rotation_54 0 -1 0 0.50702494
   hidden position_54_0 1.04299
-  hidden rotation_55 0 1 0 1.0429913
+  hidden rotation_55 0 1 0 1.0429914
   hidden position_55_0 -0.539996
-  hidden rotation_56 0 -1 0 0.53999552
-  hidden position_56_0 0.0310044
-  hidden rotation_57 1 0 0 0.031004441
-  hidden translation_58 0.020126946 0.00714695 -0.040844717
-  hidden rotation_58 6.1223113e-7 -5.3244649e-7 1 -3.1415781
-  translation -3.0650335 0.30528854 6.447672
-  rotation 0.99977038 -0.015856243 -0.014414133 -1.5720976
+  hidden rotation_56 0 -1 0 0.53999607
+  hidden position_56_0 0.0310047
+  hidden rotation_57 1 0 0 0.031004745
+  hidden translation_58 0.020127075 0.00714692 -0.040791972
+  hidden rotation_58 1.0554885e-6 -6.2823874e-7 1 -3.1415781
+  translation -3.1742078 0.3056965 2.8395004
+  rotation 0.99977005 -0.016107178 -0.014156294 -1.5723304
   controller "nao_controller_node"
   cameraWidth 320
   cameraHeight 240
